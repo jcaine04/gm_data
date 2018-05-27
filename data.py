@@ -31,6 +31,7 @@ class Member(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer)
     nickname = Column(String(100))
+    group_id = Column(Integer)
 
 
 class Message(Base):

@@ -39,12 +39,34 @@ class GMGroup:
             self.db_session.add(group)
             self.db_session.commit()
 
+    def store_members(self):
+        for group_dict in self.groups_list:
+            members = group_dict.get('members')
+            group_id = group_dict.get('id')
+            for members_dict in members:
+                id = members_dict.get('id')
+                user_id = members_dict.get('user_id')
+                nickname = members_dict.get('nickname')
+                member = Member(id=id, user_id=user_id, nickname=nickname, group_id=group_id)
+                self.db_session.add(member)
+                self.db_session.commit()
+
     def group_runner(self):
         logger.info("Pulling groups from the api")
         self.pull_groups()
         logger.info("Storing groups in database")
         self.store_groups()
+        logger.info("Storing members from each group")
+        self.store_members()
+
+
+class GMMember:
+
+    def __init__(self):
+        self.endpoint = self.endpoint = f'https://api.groupme.com/v3/groups?token={GM_API_TOKEN}'
+
 
 
 if __name__ == '__main__':
-    pass
+    g = GMGroup()
+    g.group_runner()
