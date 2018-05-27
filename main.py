@@ -4,6 +4,7 @@ import os
 import requests
 
 from data import Group, Member, Message, Attachment
+from data import get_session, create_database
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -11,11 +12,12 @@ logger = logging.getLogger(__name__)
 GM_API_TOKEN = os.environ.get('GM_API_TOKEN')
 
 
-class GM_Group:
+class GMGroup:
 
     def __init__(self):
         self.endpoint = f'https://api.groupme.com/v3/groups?token={GM_API_TOKEN}'
         self.groups_list = []
+        self.db_session = get_session()
 
     def pull_groups(self):
         try:
@@ -34,6 +36,15 @@ class GM_Group:
             description = group_dict.get('description')
 
             group = Group(id=id, name=name, description=description)
-            #TODO: Need to add code to store this stuff
+            self.db_session.add(group)
+            self.db_session.commit()
+
+    def group_runner(self):
+        logger.info("Pulling groups from the api")
+        self.pull_groups()
+        logger.info("Storing groups in database")
+        self.store_groups()
 
 
+if __name__ == '__main__':
+    pass
