@@ -163,5 +163,5 @@ if __name__ == '__main__':
     # g.group_runner()
 
     # get all messages for one group
-    g_message = GMMessage(13989673)
+    g_message = GMMessage(3009645)
     g_message.message_runner()

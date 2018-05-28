@@ -110,3 +110,7 @@ venv.bak/
 
 # sqlite databases
 *.sqlite
+
+# images
+*.jpg
+*.png
